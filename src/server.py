@@ -87,7 +87,7 @@ class Server:
                     msg_dump = client.recv(BUFSIZE)
                     msg = pickle.loads(msg_dump)
                     if self.is_authentic(msg):
-                        if msg != "!quit":
+                        if msg['message'] != "!quit":
                             self.broadcast(msg_dump)
                         else:
                             client.close()

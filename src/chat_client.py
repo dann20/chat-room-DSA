@@ -27,24 +27,13 @@ class ChatGUI(Ui_MainWindow):
         self.worker = WorkerThread(client_socket, username, self.dsa, public_key_dict)
         self.worker.start()
 
-    # def setupUi(self, MainWindow):
-    #     super().setupUi(MainWindow)
-    #     self.message.installEventFilter(self.scrollAreaWidgetContents_2)
-
-    # def eventFilter(self, obj, event):
-    #     if event.type() == QtCore.QEvent.KeyPress and obj is self.message:
-    #         if event.key() == QtCore.Qt.Key_Return and self.message.hasFocus():
-    #             self.send()
-    #     return QWidget.eventFilter(self.scrollAreaWidgetContents_2, obj, event)
-
     def link(self):
-        # self.message.returnPressed
+        self.message.returnPressed.connect(self.send)
         self.send_btn.clicked.connect(self.send)
-        self.send_file_btn.clicked.connect(self.send_file)
         self.worker.update_log.connect(self.append_message)
 
     def send(self):
-        msg = self.message.toPlainText()
+        msg = self.message.text()
         msg_dict = {"username": self.username,
                     "message": msg,
                     "signature": self.dsa.sign_message(msg),
@@ -53,7 +42,7 @@ class ChatGUI(Ui_MainWindow):
         self.client.send(msg_dict_dump)
         display_text = f"{self.username}: {msg}"
         self.chat_log.append(display_text)
-        self.message.setText('')
+        self.message.clear()
         if msg == "!quit":
             self.client.close()
             QtWidgets.qApp.quit()

@@ -71,27 +71,23 @@
     <widget class="QPushButton" name="send_btn">
      <property name="geometry">
       <rect>
-       <x>570</x>
+       <x>690</x>
        <y>510</y>
-       <width>71</width>
+       <width>101</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>mononoki Nerd Font</family>
+       <pointsize>14</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="text">
       <string>Send</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="send_file_btn">
-     <property name="geometry">
-      <rect>
-       <x>650</x>
-       <y>510</y>
-       <width>141</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Choose File(s)</string>
      </property>
     </widget>
     <widget class="QScrollArea" name="scrollArea_2">
@@ -99,7 +95,7 @@
       <rect>
        <x>10</x>
        <y>510</y>
-       <width>551</width>
+       <width>671</width>
        <height>41</height>
       </rect>
      </property>
@@ -111,17 +107,17 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>549</width>
+        <width>669</width>
         <height>39</height>
        </rect>
       </property>
-      <widget class="QTextEdit" name="message">
+      <widget class="QLineEdit" name="message">
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
-         <width>551</width>
-         <height>41</height>
+         <y>-6</y>
+         <width>671</width>
+         <height>51</height>
         </rect>
        </property>
       </widget>
@@ -130,7 +126,6 @@
     <zorder>scrollArea_2</zorder>
     <zorder>scrollArea</zorder>
     <zorder>send_btn</zorder>
-    <zorder>send_file_btn</zorder>
    </widget>
   </widget>
  </widget>

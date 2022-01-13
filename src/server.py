@@ -1,6 +1,7 @@
 import os
 import logging
 import pickle
+from datetime import datetime
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 
@@ -50,10 +51,13 @@ class Server:
         self.file_server_socket.close()
 
     def create_msg(self, msg):
+        now = datetime.now()
+        timestamp = now.strftime("%H:%M:%S")
         msg_dict = {"username": 'SERVER',
                     "message": msg,
                     "signature": self.dsa.sign_message(msg),
-                    "type": "message"}
+                    "type": "message",
+                    "timestamp": timestamp}
         msg_dump = pickle.dumps(msg_dict)
         return msg_dump
 
@@ -136,9 +140,9 @@ if __name__ == '__main__':
     fmt = '[%(levelname)s] %(asctime)s - %(message)s'
     logging.basicConfig(level=logging.INFO, format=fmt)
 
-    HOST = '127.0.0.1'
-    PORT = 22020
-    FILE_PORT = 22021
+    HOST = "192.168.1.6"
+    PORT = 60000
+    FILE_PORT = 60001
     BUFSIZE = 2048
 
     private_key = RSAKey.from_json_file(f'../keys/private/SERVER.json')

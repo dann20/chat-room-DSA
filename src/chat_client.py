@@ -1,11 +1,12 @@
 import os
 import logging
 import pickle
+from datetime import datetime
 from socket import AF_INET, socket, SOCK_STREAM
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 from DSA import DSA
 from RSA import RSAKey
@@ -33,14 +34,17 @@ class ChatGUI(Ui_MainWindow):
         self.worker.update_log.connect(self.append_message)
 
     def send(self):
+        now = datetime.now()
+        timestamp = now.strftime("%H:%M:%S")
         msg = self.message.text()
         msg_dict = {"username": self.username,
                     "message": msg,
                     "signature": self.dsa.sign_message(msg),
-                    "type": "message"}
+                    "type": "message",
+                    "timestamp": timestamp}
         msg_dict_dump = pickle.dumps(msg_dict)
         self.client.send(msg_dict_dump)
-        display_text = f"{self.username}: {msg}"
+        display_text = f"{timestamp}|{self.username}: {msg}"
         self.chat_log.append(display_text)
         self.message.clear()
         if msg == "!quit":
@@ -124,7 +128,7 @@ class WorkerThread(QThread):
                 if msg_dict['username'] == self.username:
                     continue
                 if self.dsa.verify_message(msg_dict['signature'], msg_dict['message'], self.public_key_dict[msg_dict['username']]):
-                    display_text = f"{msg_dict['username']}: {msg_dict['message']}"
+                    display_text = f"{msg_dict['timestamp']}|{msg_dict['username']}: {msg_dict['message']}"
                 else:
                     display_text = f"Message {msg_dict} failed verification."
                 self.update_log.emit(display_text)
@@ -139,9 +143,9 @@ if __name__ == '__main__':
     # PORT = input('Enter server message port: ')
     # FILE_PORT = input('Enter server file port: ')
     # USERNAME = input('Enter your username: ')
-    HOST = '127.0.0.1'
-    PORT = 22020
-    FILE_PORT = 22021
+    HOST = "192.168.1.6"
+    PORT = 60000
+    FILE_PORT = 60001
     USERNAME = input('Enter your username: ')
 
     MESSAGE_ADDR = (HOST, int(PORT))
